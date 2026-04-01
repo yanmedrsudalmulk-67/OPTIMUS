@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the OPTIMUS application.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique identifier of the user." },
+        "username": { "type": "string", "description": "The username of the user." },
+        "role": { "type": "string", "enum": ["unit", "admin"], "description": "The role of the user." },
+        "unitName": { "type": "string", "description": "The name of the unit (if role is unit)." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The timestamp when the user was created." }
+      },
+      "required": ["uid", "username", "role", "createdAt"]
+    },
+    "IndikatorMaster": {
+      "title": "IndikatorMaster",
+      "description": "Master data for quality indicators.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier of the indicator." },
+        "kategori": { "type": "string", "enum": ["INM", "IMP-RS", "IMP-Unit", "SPM"], "description": "The category of the indicator." },
+        "judul": { "type": "string", "description": "The title of the indicator." },
+        "dasar_pemikiran": { "type": "string", "description": "The rationale behind the indicator." },
+        "dimensi_mutu": { "type": "array", "items": { "type": "string" }, "description": "The quality dimensions (e.g., Efficiency, Safety)." },
+        "tujuan": { "type": "string", "description": "The objective of the indicator." },
+        "definisi_operasional": { "type": "string", "description": "The operational definition of the indicator." },
+        "tipe": { "type": "string", "enum": ["Struktur", "Proses", "Outcome"], "description": "The type of indicator." },
+        "satuan": { "type": "string", "description": "The unit of measurement (e.g., %, minutes)." },
+        "numerator": { "type": "string", "description": "The numerator definition." },
+        "denominator": { "type": "string", "description": "The denominator definition." },
+        "target": { "type": "string", "description": "The target value." },
+        "kriteria": { "type": "string", "description": "The inclusion/exclusion criteria." },
+        "formula": { "type": "string", "description": "The calculation formula." },
+        "metode_pengumpulan": { "type": "string", "description": "The data collection method." },
+        "sumber_data": { "type": "string", "description": "The source of the data." },
+        "cara_sampling": { "type": "string", "description": "The sampling method." },
+        "instrumen": { "type": "string", "description": "The data collection instrument." },
+        "besar_sampel": { "type": "string", "description": "The sample size." },
+        "periode_pengumpulan": { "type": "array", "items": { "type": "string", "enum": ["Harian", "Mingguan", "Bulanan"] }, "description": "The data collection frequency." },
+        "periode_analisis": { "type": "array", "items": { "type": "string", "enum": ["Bulanan", "Triwulan", "Tahunan"] }, "description": "The analysis and reporting frequency." },
+        "penyajian": { "type": "array", "items": { "type": "string", "enum": ["Tabel", "Grafik", "Dashboard"] }, "description": "The data presentation format." },
+        "penanggung_jawab": { "type": "string", "description": "The person responsible for the indicator." },
+        "created_by": { "type": "string", "description": "The UID of the creator." },
+        "created_at": { "type": "string", "format": "date-time", "description": "The timestamp when the indicator was created." },
+        "updated_at": { "type": "string", "format": "date-time", "description": "The timestamp when the indicator was last updated." },
+        "updated_by": { "type": "string", "description": "The UID of the user who last updated the indicator." }
+      },
+      "required": [
+        "id", "kategori", "judul", "created_by", "created_at"
+      ]
+    },
+    "DataIndikator": {
+      "title": "DataIndikator",
+      "description": "Input data for a specific indicator by a unit.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier of the data entry." },
+        "unit": { "type": "string", "description": "The main unit name." },
+        "sub_unit": { "type": "string", "description": "The sub-unit name (optional)." },
+        "kategori": { "type": "string", "description": "The category of the indicator." },
+        "indikator_id": { "type": "string", "description": "The ID of the master indicator." },
+        "nama_indikator": { "type": "string", "description": "The name of the indicator." },
+        "nilai": { "type": "number", "description": "The inputted value." },
+        "numerator_value": { "type": "number", "description": "The inputted numerator value." },
+        "denominator_value": { "type": "number", "description": "The inputted denominator value." },
+        "analisis": { "type": "string", "description": "The analysis of the data." },
+        "rencana_tindak_lanjut": { "type": "string", "description": "The follow-up plan." },
+        "tanggal": { "type": "string", "format": "date", "description": "The date of the data." },
+        "bulan": { "type": "number", "description": "The month of the data." },
+        "tahun": { "type": "number", "description": "The year of the data." },
+        "created_by": { "type": "string", "description": "The UID of the user who created the record." },
+        "created_at": { "type": "string", "format": "date-time", "description": "The timestamp when the data was created." }
+      },
+      "required": ["id", "unit", "kategori", "indikator_id", "nama_indikator", "nilai", "tanggal", "bulan", "tahun", "created_by", "created_at"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Application settings.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier of the settings document." },
+        "logoUrl": { "type": "string", "description": "The URL of the application logo." },
+        "appName": { "type": "string", "description": "The name of the application." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "The timestamp when the settings were last updated." }
+      },
+      "required": ["id", "logoUrl", "appName", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profiles and roles."
+    },
+    "indikator_master/{indikatorId}": {
+      "schema": "IndikatorMaster",
+      "description": "Stores master data for quality indicators."
+    },
+    "data_indikator/{dataId}": {
+      "schema": "DataIndikator",
+      "description": "Stores inputted data for indicators by units."
+    },
+    "settings/{settingId}": {
+      "schema": "Settings",
+      "description": "Stores application settings."
+    }
+  }
+}
